@@ -37,7 +37,7 @@ router.post('/category/create', async (req, res) => {
     }
 
     await Columns.insertMany([todo, inProgress, completed])
-    const allCategories = await Categories.find()
+    const allCategories = await Categories.find().sort({date: -1})
     const allColumns = await Columns.find()
 
     res.json({newCategory, allCategories, allColumns})
@@ -46,11 +46,9 @@ router.post('/category/create', async (req, res) => {
   }
 })
 
-
-
 router.get('/categories', async (req, res) => {
   try {
-    const allCategories = await Categories.find()
+    const allCategories = await Categories.find().sort({date: -1})
     const allColumns = await Columns.find()
     const allTodos = await Todos.find()
 
@@ -77,15 +75,35 @@ router.get('/categories', async (req, res) => {
   }
 })
 
+router.put('/category/update', async (req, res) => {
+  try {
+    const {  _id, name, slug, color } = req.fields
+
+    const filter = { _id: _id };
+    const update = { name, slug, color };
+
+    // `doc` is the document _after_ `update` was applied because of
+    // `new: true`
+    const doc = await Categories.findOneAndUpdate(filter, update, {
+      new: true
+    });
+
+    res.json(doc)
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+})
+
+
 router.post('/category/delete', async (req, res) => {
   try {
     const { _id } = req.fields
+
     await Todos.deleteMany({categoryId: _id})
     await Columns.deleteMany({categoryId : _id})
     await Categories.findByIdAndDelete(_id)
 
-    const allCategories = await Categories.find()
-    res.json(allCategories)
+    res.json(_id)
   } catch (error) {
     res.status(400).json({message: error.message})
   }

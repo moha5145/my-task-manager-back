@@ -6,16 +6,19 @@ const Columns = require('../models/Columns')
 const Todos = require('../models/Todos')
 
 
-router.post('/todos/create', async (req, res) => {
+router.post('/todo/create', async (req, res) => {
   try {
-    const {newTodos} = req.fields
-    const filterdTodos = newTodos.filter((todo) => {
-      delete todo.id
-      return todo
-    })
+    console.log('req.fields', req.fields)
+  //   const {newTodos} = req.fields
+  //   const filterdTodos = newTodos.filter((todo) => {
+  //     delete todo._id
+  //     return todo
+  //   })
 
-  const todos = await Todos.insertMany(filterdTodos);
-    res.json(todos)
+  // const todos = await Todos.insertMany(filterdTodos);
+    const todo = new Todos(req.fields)
+    await todo.save()
+    res.json(todo)
   } catch (error) {
     res.status(400).json({message: error.message})
   }
