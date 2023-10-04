@@ -21,9 +21,13 @@ const Todos = mongoose.model("Todos", {
     type: Boolean,
     default: false
   },
+  isEditing: {
+    type: Boolean,
+    default: false
+  },
   priority: {
     type: String,
-    default: "",
+    default: "aucune",
   },
   status: {
     type: String,

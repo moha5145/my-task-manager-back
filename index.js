@@ -1,13 +1,13 @@
 const express = require("express");
 const formidable = require('express-formidable')
 const cors = require('cors')
+require('dotenv').config()
 const mongoose = require('mongoose')
 
 const app = express();
 app.use(formidable());
 app.use(cors())
-mongoose.connect("mongodb://localhost:27017/my-task-manager");
-
+mongoose.connect(process.env.MONGODB_URI);
 
 const categoriesRoute = require('./routes/categories')
 app.use(categoriesRoute)
@@ -22,6 +22,8 @@ app.use(todosRoute)
 app.all('*', (req, res) => {
   res.status(400).json({message: "Pages not found"})
 })
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
+
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
+  console.log(`Server running in port ${PORT}`);
 });

@@ -79,6 +79,9 @@ router.put('/category/update', async (req, res) => {
   try {
     const {  _id, name, slug, color } = req.fields
 
+    if (!_id) {
+      throw new Error('Missing _id')
+    }
     const filter = { _id: _id };
     const update = { name, slug, color };
 
