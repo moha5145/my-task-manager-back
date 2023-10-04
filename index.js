@@ -1,5 +1,5 @@
 const express = require("express");
-const formidable = require('express-formidable')
+const formidable = require('express-formidable-v2')
 const cors = require('cors')
 require('dotenv').config()
 const mongoose = require('mongoose')
