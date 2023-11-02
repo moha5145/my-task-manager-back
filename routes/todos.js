@@ -26,8 +26,8 @@ router.post('/todo/create', async (req, res) => {
 
 router.put('/todo/update', async (req, res) => {
   try {
-    const {_id, title, details, dueDate, expanded, priority, status } = req.fields || {}
-    
+    const {_id, title, details, dueDate, expanded, priority, status, columnId } = req.fields || {}
+    console.log('columnId ss', columnId)
     if (!_id) {
       throw new Error('Missing _id')
     }
@@ -60,6 +60,8 @@ router.put('/todo/update', async (req, res) => {
     // if (status) {
       todo.status = status
     // }
+
+    todo.columnId = columnId
     
     await todo.save()
     res.json(todo)
@@ -97,6 +99,19 @@ router.post('/todo/delete', async (req, res) => {
    
     const allTodos = await Todos.find()
     res.json({allTodos})
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+})
+
+router.delete('/todos/delete/:columnId', async (req, res) => {
+  try {
+    console.log('req.params', req.params)
+    const { columnId } = req.params
+    const todos = await Todos.deleteMany({columnId})
+   
+    // const allTodos = await Todos.find()
+    res.json(todos)
   } catch (error) {
     res.status(400).json({message: error.message})
   }

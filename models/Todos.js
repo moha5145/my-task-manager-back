@@ -36,6 +36,10 @@ const Todos = mongoose.model("Todos", {
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "categoryId"
+  },
+  columnId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "columnId"
   }
 });
 
