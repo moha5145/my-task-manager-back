@@ -47,9 +47,9 @@ router.put('/column/update', async (req, res) => {
 
 router.post('/column/delete', async (req, res) => {
   try {
-    const {title, categoryId, _id } = req.fields
-    await Todos.deleteMany({categoryId: categoryId, status: title})
-    await Columns.findByIdAndDelete({_id})
+    const {title, categoryId, columnId } = req.fields
+    await Todos.deleteMany({categoryId, status: title})
+    await Columns.findByIdAndDelete({_id: columnId})
 
     const allColumns = await Columns.find({categoryId})
     const allTodos = await Todos.find()
