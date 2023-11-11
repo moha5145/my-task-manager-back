@@ -18,6 +18,8 @@ app.use(columnsRoute)
 const todosRoute = require('./routes/todos');
 app.use(todosRoute)
 
+const userRoute = require('./routes/user')
+app.use(userRoute)
 
 app.all('*', (req, res) => {
   res.status(400).json({message: "Pages not found"})
