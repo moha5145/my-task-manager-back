@@ -8,37 +8,44 @@ const Todos = require('../models/Todos')
 
 router.post('/category/create', async (req, res) => {
   try {
-    const { name, slug, color, columns } = req.fields
-    const newCategory = new Categories({name, slug, color, columns})
+    const { name, slug, color, columns, userId } = req.fields
+
+    if (!name, !slug, !columns, !userId) {
+      throw new Error('all fields are required (name, slug, columns, userId)')
+    }
+
+    const newCategory = new Categories({name, slug, color, columns, userId})
     await newCategory.save()
-    const categoryId = newCategory.id
-    const category = await Categories.findById(categoryId)
+    const categoryId = newCategory._id
 
     const todo = {
       title: "todo",
       taskTitle: "",
       showMenu: false,
       todos: [],
-      categoryId
+      categoryId,
+      userId
     }
     const inProgress = {
       title: "in-Progress",
       taskTitle: "",
       showMenu: false,
       todos: [],
-      categoryId
+      categoryId,
+      userId
     }
     const completed = {
       title: "completed",
       taskTitle: "",
       showMenu: false,
       todos: [],
-      categoryId
+      categoryId,
+      userId
     }
 
     await Columns.insertMany([todo, inProgress, completed])
-    const allCategories = await Categories.find().sort({date: -1})
-    const allColumns = await Columns.find()
+    const allCategories = await Categories.find({userId}).sort({date: -1})
+    const allColumns = await Columns.find({userId})
 
     res.json({newCategory, allCategories, allColumns})
   } catch (error) {
@@ -46,11 +53,17 @@ router.post('/category/create', async (req, res) => {
   }
 })
 
-router.get('/categories', async (req, res) => {
+router.get('/categories/:userId', async (req, res) => {
   try {
-    const allCategories = await Categories.find().sort({date: -1})
-    const allColumns = await Columns.find()
-    const allTodos = await Todos.find()
+    const { userId } = req.params
+
+    if (!userId) {
+      throw new Error('Missing userId')
+    }
+
+    const allCategories = await Categories.find({userId}).sort({date: -1})
+    const allColumns = await Columns.find({userId})
+    const allTodos = await Todos.find({userId})
 
     const categoriesWithColumns = allCategories.map((category) => {
       const columns = allColumns.filter(column => { 

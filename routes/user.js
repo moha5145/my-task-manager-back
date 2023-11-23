@@ -34,8 +34,7 @@ router.post("/users/signup", async (req, res) => {
         })
 
         await newUser.save()
-
-        res.json({message: "user successfully created", userName, email, token})
+        res.json({message: "user successfully created", userName, email, token, userId: newUser._id})
     } catch (error) {
         console.log('error', error)
         res.status(400).json({message: error.message})
@@ -62,7 +61,7 @@ router.post("/users/login", async (req, res) => {
             return res.json({message: "incorrect password or email"}) 
         }
 
-        res.json({userName: user.userName, email: user.email, token: user.token})
+        res.json({message: "login successful", userName: user.userName, email: user.email, token: user.token, userId: user._id})
     } catch (error) {
         console.log('error', error)
         res.status(400).json({message: error.message})

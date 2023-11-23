@@ -1,23 +1,17 @@
 const express = require("express");
 const router = express.Router();
 
-const Categories = require('../models/Categoris')
-const Columns = require('../models/Columns')
 const Todos = require('../models/Todos')
-
 
 router.post('/todo/create', async (req, res) => {
   try {
     
-  //   const {newTodos} = req.fields
-  //   const filterdTodos = newTodos.filter((todo) => {
-  //     delete todo._id
-  //     return todo
-  //   })
-
-  // const todos = await Todos.insertMany(filterdTodos);
+    if (!req.fields) {
+      throw new Error('Missing fields')
+    }
     const todo = new Todos(req.fields)
     await todo.save()
+
     res.json(todo)
   } catch (error) {
     res.status(400).json({message: error.message})
@@ -27,7 +21,7 @@ router.post('/todo/create', async (req, res) => {
 router.put('/todo/update', async (req, res) => {
   try {
     const {_id, title, details, dueDate, expanded, priority, status, columnId } = req.fields || {}
-    console.log('columnId ss', columnId)
+
     if (!_id) {
       throw new Error('Missing _id')
     }
@@ -106,7 +100,6 @@ router.post('/todo/delete', async (req, res) => {
 
 router.delete('/todos/delete/:columnId', async (req, res) => {
   try {
-    console.log('req.params', req.params)
     const { columnId } = req.params
     const todos = await Todos.deleteMany({columnId})
    

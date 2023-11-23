@@ -12,6 +12,10 @@ const Categories = mongoose.model("Categories", {
   color: {
     type: Object,
     default: {},
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "userId"
   }
   
 });

@@ -7,9 +7,9 @@ const Todos = require('../models/Todos')
 
 router.post('/column/create', async (req, res) => {
   try {
-    const { title, taskTitle, showMenu, todos, categoryId} = req.fields
+    const { title, taskTitle, showMenu, todos, categoryId, userId} = req.fields
     const category = await Categories.findById(categoryId)
-    const newColumn = new Columns({title, taskTitle, showMenu, todos, categoryId: category.id})
+    const newColumn = new Columns({title, taskTitle, showMenu, todos, categoryId: category._id, userId})
     await newColumn.save()
     res.json(newColumn)
   } catch (error) {

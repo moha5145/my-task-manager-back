@@ -20,8 +20,11 @@ const Columns = mongoose.model("Columns", {
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "categoryId"
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "userId"
     }
-    
 });
 
 module.exports = Columns

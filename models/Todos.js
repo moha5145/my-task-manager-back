@@ -40,6 +40,10 @@ const Todos = mongoose.model("Todos", {
   columnId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "columnId"
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "userId"
   }
 });
 
