@@ -9,9 +9,20 @@ router.post('/column/create', async (req, res) => {
   try {
     const { title, taskTitle, showMenu, todos, categoryId, userId} = req.fields
     const category = await Categories.findById(categoryId)
+
+    if(!title || !categoryId || !userId) {
+      throw new Error('all fields are required (title, showMenu, categoryId, userId)')
+    }
+
+    const column = await Columns.findOne({title, categoryId, userId})
+
+    if (column) {
+      return res.json({message: 'Column already exists'})
+    }
+
     const newColumn = new Columns({title, taskTitle, showMenu, todos, categoryId: category._id, userId})
     await newColumn.save()
-    res.json(newColumn)
+    res.json({message: 'Column successfully created', column: newColumn})
   } catch (error) {
     res.status(400).json({message: error.message})
   }

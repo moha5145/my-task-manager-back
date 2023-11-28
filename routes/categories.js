@@ -34,6 +34,22 @@ router.post('/category/create', async (req, res) => {
       categoryId,
       userId
     }
+    const review = {
+      title: "review",
+      taskTitle: "",
+      showMenu: false,
+      todos: [],
+      categoryId,
+      userId
+    }
+    const rework  = {
+      title: "rework",
+      taskTitle: "",
+      showMenu: false,
+      todos: [],
+      categoryId,
+      userId
+    }
     const completed = {
       title: "completed",
       taskTitle: "",
@@ -43,7 +59,7 @@ router.post('/category/create', async (req, res) => {
       userId
     }
 
-    await Columns.insertMany([todo, inProgress, completed])
+    await Columns.insertMany([todo, inProgress, review, rework, completed])
     // const allCategories = await Categories.find({userId}).sort({date: -1})
     // const allColumns = await Columns.find({userId})
 
