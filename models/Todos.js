@@ -44,6 +44,12 @@ const Todos = mongoose.model("Todos", {
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "userId"
+  },
+  created_at: {
+    type: Date, default: Date.now
+  },
+  updated_at: {
+    type: Date, default: Date.now
   }
 });
 

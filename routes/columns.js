@@ -17,6 +17,16 @@ router.post('/column/create', async (req, res) => {
   }
 })
 
+router.get('/columns/:userId/:categoryId', async (req, res) => {
+  try {
+    const { userId, categoryId } = req.params
+    const columns = await Columns.find({userId, categoryId})
+    res.json(columns)
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+})
+
 router.put('/column/update', async (req, res) => {
   try {
     const { column, todosIds} = req.fields
@@ -52,7 +62,7 @@ router.post('/column/delete', async (req, res) => {
     await Columns.findByIdAndDelete({_id: columnId})
 
     const allColumns = await Columns.find({categoryId})
-    const allTodos = await Todos.find()
+    const allTodos = await Todos.find().sort({created_at: -1})
     res.json({allColumns, allTodos})
   } catch (error) {
     res.status(400).json({message: error.message})

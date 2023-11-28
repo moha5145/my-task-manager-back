@@ -14,7 +14,7 @@ router.post('/category/create', async (req, res) => {
       throw new Error('all fields are required (name, slug, columns, userId)')
     }
 
-    const newCategory = new Categories({name, slug, color, columns, userId})
+    const newCategory = new Categories({name, slug, color, columns, userId, created_at: Date.now(), updated_at: Date.now()})
     await newCategory.save()
     const categoryId = newCategory._id
 
@@ -44,10 +44,10 @@ router.post('/category/create', async (req, res) => {
     }
 
     await Columns.insertMany([todo, inProgress, completed])
-    const allCategories = await Categories.find({userId}).sort({date: -1})
-    const allColumns = await Columns.find({userId})
+    // const allCategories = await Categories.find({userId}).sort({date: -1})
+    // const allColumns = await Columns.find({userId})
 
-    res.json({newCategory, allCategories, allColumns})
+    res.json(newCategory)
   } catch (error) {
     res.status(400).json({message: error.message})
   }
@@ -61,9 +61,9 @@ router.get('/categories/:userId', async (req, res) => {
       throw new Error('Missing userId')
     }
 
-    const allCategories = await Categories.find({userId}).sort({date: -1})
+    const allCategories = await Categories.find({userId}).sort({created_at: -1})
     const allColumns = await Columns.find({userId})
-    const allTodos = await Todos.find({userId})
+    const allTodos = await Todos.find({userId}).sort({created_at: -1})
 
     const categoriesWithColumns = allCategories.map((category) => {
       const columns = allColumns.filter(column => { 
