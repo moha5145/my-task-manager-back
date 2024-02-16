@@ -1,13 +1,24 @@
 const express = require("express");
+const mongoose = require('mongoose')
 const formidable = require('express-formidable-v2')
 const cors = require('cors')
 require('dotenv').config()
-const mongoose = require('mongoose')
 
 const app = express();
 app.use(formidable());
 app.use(cors())
-mongoose.connect(process.env.MONGODB_URI);
+
+
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGODB_URI);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+
 
 const categoriesRoute = require('./routes/categories')
 app.use(categoriesRoute)
@@ -26,6 +37,10 @@ app.all('*', (req, res) => {
 })
 
 const PORT = process.env.PORT || 3000
-app.listen(PORT, () => {
+
+//Connect to the database before listening
+connectDB().then(() => {
+  app.listen(PORT, () => {
   console.log(`Server running in port ${PORT}`);
 });
+})
