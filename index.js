@@ -7,14 +7,13 @@ require('dotenv').config()
 const app = express();
 app.use(formidable());
 
-let corsOptions = { 
-  origin : [
-  'http://localhost:3000',
-  'http://localhost:3000',
-  'https://my-task-manager-moha.netlify.app/'
-  ], 
-} 
+const corsOptions = {
+  origin: '*',
+  credentials: true,
+  optionSuccessStatus: 200
+}
 app.use(cors(corsOptions))
+
 
 
 const connectDB = async () => {
